@@ -16,19 +16,23 @@ public class Client implements Serializable {
     private String name;
     private String cpf;
     private Double income;
-    private Instant birthDate;
     private Integer children;
+
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private Instant birthDate;
+
 
     public Client(){
 
     }
 
-    public Client(Long id, String name, String cpf, Double income, Integer children) {
+    public Client(Long id, String name, String cpf, Double income, Integer children, Instant birthDate) {
         this.id = id;
         this.name = name;
         this.cpf = cpf;
         this.income = income;
         this.children = children;
+        this.birthDate = birthDate;
     }
 
     public Long getId() {
@@ -78,6 +82,7 @@ public class Client implements Serializable {
     public void setChildren(Integer children) {
         this.children = children;
     }
+
 
     @Override
     public boolean equals(Object o) {
