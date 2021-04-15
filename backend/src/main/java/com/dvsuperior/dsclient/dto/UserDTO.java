@@ -2,6 +2,9 @@ package com.dvsuperior.dsclient.dto;
 
 import com.dvsuperior.dsclient.entities.User;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,8 +13,12 @@ public class UserDTO implements Serializable {
     private static final long serialVersionUID =1l;
 
     private Long id;
+
+    @Size(min = 5, max = 60, message = " Deve ter entre 5 e 60 caracteres")
+    @NotBlank(message = "Campo obrigatório")
     private String firstName;
     private String lastName;
+    @Email(message = "Favor entrar um email válido")
     private String email;
 
     Set<RoleDTO> roles = new HashSet<>();
