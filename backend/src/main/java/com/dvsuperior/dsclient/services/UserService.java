@@ -1,9 +1,6 @@
 package com.dvsuperior.dsclient.services;
 
-import com.dvsuperior.dsclient.dto.ClientDTO;
-import com.dvsuperior.dsclient.dto.RoleDTO;
-import com.dvsuperior.dsclient.dto.UserDTO;
-import com.dvsuperior.dsclient.dto.UserInsertDTO;
+import com.dvsuperior.dsclient.dto.*;
 import com.dvsuperior.dsclient.entities.Client;
 import com.dvsuperior.dsclient.entities.Role;
 import com.dvsuperior.dsclient.entities.User;
@@ -60,7 +57,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO update(Long id, UserDTO dto) {
+    public UserDTO update(Long id, UserUpdateDTO dto) {
         try {
             User entity = repository.getOne(id);
             copyDtoToEntity(dto, entity);
