@@ -1,10 +1,13 @@
 package com.dvsuperior.dsclient.services;
 
-import com.dvsuperior.dsclient.dto.*;
-import com.dvsuperior.dsclient.entities.Client;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.dvsuperior.dsclient.dto.RoleDTO;
+import com.dvsuperior.dsclient.dto.UserDTO;
+import com.dvsuperior.dsclient.dto.UserInsertDTO;
+import com.dvsuperior.dsclient.dto.UserUpdateDTO;
 import com.dvsuperior.dsclient.entities.Role;
 import com.dvsuperior.dsclient.entities.User;
-import com.dvsuperior.dsclient.repositories.ClientRepository;
 import com.dvsuperior.dsclient.repositories.RoleRepository;
 import com.dvsuperior.dsclient.repositories.UserRepository;
 import com.dvsuperior.dsclient.services.exceptions.DataBaseException;
@@ -14,6 +17,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +28,9 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
+
+    private Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -88,5 +96,16 @@ public class UserService {
             Role role = roleRepository.getOne(roleDTO.getId());
             entity.getRoles().add(role);
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = repository.findByEmail(username);
+        if(user == null){
+            logger.error("Email not found" + username);
+            throw new UsernameNotFoundException("Email not found");
+        }
+           logger.info("User found" + username);
+        return user;
     }
 }
